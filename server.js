@@ -5,10 +5,7 @@ const path = require('path');
 const app = express();
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
-app.use(cors({
-  "origin": "http://localhost:3000",
-  "methods": "GET,POST,DELETE,PUT",
-}));
+app.use(cors());
 
 const testimonialRoutes = require('./routes/testimonials.routes');
 const concertRoutes = require('./routes/concerts.routes');
