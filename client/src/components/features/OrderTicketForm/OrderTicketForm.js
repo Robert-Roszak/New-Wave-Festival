@@ -3,7 +3,6 @@ import { Button, Form, FormGroup, Label, Input, Row, Col, Alert, Progress } from
 
 import './OrderTicketForm.scss';
 import SeatChooser from './../SeatChooser/SeatChooserContainer';
-import { loadSeats } from '../../../redux/seatsRedux';
 
 class OrderTicketForm extends React.Component {
 
@@ -40,13 +39,13 @@ class OrderTicketForm extends React.Component {
 
   submitForm = async (e) => {
     const { order } = this.state;
-    const { addSeat } = this.props;
+    const { addSeat, loadSeats } = this.props;
 
     e.preventDefault();
 
     if(order.client && order.email && order.day && order.seat) {
       await addSeat(order);
-      await loadSeats();
+      loadSeats();
       this.setState({ 
         order: {
           client: '',
