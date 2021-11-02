@@ -19,12 +19,20 @@ router.route('/seats/:id').get((req, res) => {
 
 router.route('/seats/').post((req, res) => {
     const { day, seat, client, email } = req.body;
+
     if (day && seat && client && email) {
-        const toAdd = {id: uuidv4(), day: day, seat: seat, client: client, email: email};
-        db.seats.push(toAdd);
-        res.json({ message: 'Added...' });
+        const isTheSeatTaken = db.seats.some(singleSeat => (singleSeat.day.toString() === day) && (singleSeat.seat.toString() === seat));
+
+        if (isTheSeatTaken) {
+            return res.status(900).json({ message: 'The seat is taken, please try again with another one...' });
+        }
+        else {
+            const toAdd = {id: uuidv4(), day: day, seat: seat, client: client, email: email};
+            db.seats.push(toAdd);
+            return res.json({ message: 'Added...' });
+        }
     }
-    else res.json({ message: 'Please provide all details...' });
+    else return res.status(800).json({ message: 'Please provide all details...' });
 });
 
 router.route('/seats/:id').put((req, res) => {
@@ -37,7 +45,7 @@ router.route('/seats/:id').put((req, res) => {
         toEdit.email = email;
         res.json({ message: 'Edited...' });
     }
-    else res.json({ message: 'Please provide all details...' });
+    else return res.status(800).json({ message: 'Please provide all details...' });
 });
 
 router.route('/seats/:id').delete((req, res) => {
