@@ -9,6 +9,10 @@ const getTestimonialFromLink = (req) => {
     else return { message: 'No such testimonial...' };
 }
 
+router.route('/testimonials/random').get((req, res) => {
+    res.json(db.testimonials[Math.floor(Math.random() * db.testimonials.length)]);
+});
+
 router.route('/testimonials').get((req, res) => {
     res.json(db.testimonials);
 });
@@ -16,11 +20,6 @@ router.route('/testimonials').get((req, res) => {
 router.route('/testimonials/:id').get((req, res) => {
     console.log(getTestimonialFromLink(req));
     res.json(getTestimonialFromLink(req));
-});
-
-// dlaczego nie wchodzi w random?
-router.route('/testimonials/random').get((req, res) => {
-    res.json(db.testimonials[Math.floor(Math.random() * db.testimonials.length)]);
 });
 
 router.route('/testimonials/').post((req, res) => {
