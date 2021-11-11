@@ -14,38 +14,37 @@ class OrderTicketForm extends React.Component {
       seat: '',
     },
     isError: false,
-  }
+  };
 
   updateSeat = (e, seatId) => {
     const { order } = this.state;
 
     e.preventDefault();
     this.setState({ order: { ...order, seat: seatId }});
-  }
+  };
 
   updateTextField = ({ target }) => {
     const { order } = this.state;
     const { value, name } = target;
 
     this.setState({ order: { ...order, [name]: value }});
-  }
+  };
 
   updateNumberField = ({ target }) => {
     const { order } = this.state;
     const { value, name } = target;
 
-    this.setState({ order: { ...order, [name]: parseInt(value) }});
-  }
+    this.setState({ order: { ...order, [name]: parseInt(value), seat: '' }});
+  };
 
   submitForm = async (e) => {
     const { order } = this.state;
-    const { addSeat, loadSeats } = this.props;
+    const { addSeat } = this.props;
 
     e.preventDefault();
 
     if(order.client && order.email && order.day && order.seat) {
       await addSeat(order);
-      loadSeats();
       this.setState({ 
         order: {
           client: '',
@@ -58,7 +57,7 @@ class OrderTicketForm extends React.Component {
     } else {
       this.setState({ isError: true });
     }
-  }
+  };
 
   render() {
 

@@ -29,6 +29,7 @@ router.route('/seats/').post((req, res) => {
         else {
             const toAdd = {id: uuidv4(), day: day, seat: seat, client: client, email: email};
             db.seats.push(toAdd);
+            req.io.emit('seatsUpdated', db.seats);
             return res.json({ message: 'Added...' });
         }
     }
