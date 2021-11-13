@@ -1,51 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { v4: uuidv4 } = require('uuid');
-const db = require('../db');
+const TestimonialController = require('../controllers/testimonial.controller');
 
-const getTestimonialFromLink = (req) => {
-    const testimonial = db.testimonials.find(testimonial => testimonial.id.toString() == req.params.id)
-    if (testimonial) return testimonial;
-    else return { message: 'No such testimonial...' };
-}
-
-router.route('/testimonials/random').get((req, res) => {
-    res.json(db.testimonials[Math.floor(Math.random() * db.testimonials.length)]);
-});
-
-router.route('/testimonials').get((req, res) => {
-    res.json(db.testimonials);
-});
-
-router.route('/testimonials/:id').get((req, res) => {
-    console.log(getTestimonialFromLink(req));
-    res.json(getTestimonialFromLink(req));
-});
-
-router.route('/testimonials/').post((req, res) => {
-    const { author, text } = req.body;
-    if (author && text) {
-        const toAdd = {id: uuidv4(), author: author, text: text};
-        db.testimonials.push(toAdd);
-        res.json({ message: 'Added...' });
-    }
-    else res.json({ message: 'Please provide all details...' });
-});
-
-router.route('/testimonials/:id').put((req, res) => {
-    const { author, text } = req.body;
-    if (author && text) {
-        const toEdit = getTestimonialFromLink(req);
-        toEdit.author = author;
-        toEdit.text = text;
-        res.json({ message: 'Edited...' });
-    }
-    else res.json({ message: 'Please provide all details...' });
-});
-
-router.route('/testimonials/:id').delete((req, res) => {
-    db.testimonials.splice(db.testimonials.indexOf(getTestimonialFromLink(req)), 1);
-    res.json({ message: 'Deleted...' });
-});
+router.get('/testimonials/random', TestimonialController.getRandom);
+router.get('/testimonials', TestimonialController.getAll);
+router.get('/testimonials/:id', TestimonialController.getTesById);
+router.post('/testimonials', TestimonialController.addTes)
+router.put('/testimonials/:id', TestimonialController.editTes)
+router.delete('/testimonials/:id', TestimonialController.deleteTes)
 
 module.exports = router;
