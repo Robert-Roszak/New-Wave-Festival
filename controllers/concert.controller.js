@@ -1,8 +1,17 @@
 const Concert = require('../models/concert.model');
+const Seat = require('../models/seat.model');
 
 exports.getAll = async (req, res) => {
     try {
-      res.json(await Concert.find().populate('performer'));
+      const concerts = await Concert.find().populate('performer');
+      let daysCount = 0;
+      concerts.forEach(async concert => {
+        if (concert.day > daysCount) daysCount++
+        const seatsForEachDay = await Seat.find({ day: daysCount});
+        concert.seatsCount = seatsForEachDay.length;
+        await concert.save();
+      });
+      res.json(concerts);
     }
     catch(err) {
       res.status(500).json({ message: err });
