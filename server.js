@@ -44,9 +44,14 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not found...' });
 });
 
-// connects our backend code with the database
-//mongoose.connect('mongodb+srv://adminDB:adminDB@newwavefestival.izzmw.mongodb.net/NewWaveDB?retryWrites=true&w=majority', { useNewUrlParser: true });
-mongoose.connect('mongodb://localhost:27017/NewWaveDB', { useNewUrlParser: true });
+const NODE_ENV = process.env.NODE_ENV;
+let dbUri = '';
+
+if(NODE_ENV === 'production') dbUri = 'mongodb+srv://adminDB:adminDB@newwavefestival.izzmw.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
+else if(NODE_ENV === 'test') dbUri = 'mongodb://localhost:27017/NewWaveDBtest';
+else dbUri = 'mongodb://localhost:27017/NewWaveDB';
+
+mongoose.connect(dbUri, { useNewUrlParser: true });
 const db = mongoose.connection;
 
 db.once('open', () => {

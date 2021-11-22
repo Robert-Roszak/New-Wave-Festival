@@ -53,13 +53,9 @@ export const updateConcertRequest = (seat) => {
 
       allConcerts.data.forEach(async concert => {
         let updatedConcerts = await axios.put(`${API_URL}/concerts/${concert._id}`, { day: concert.day, price: concert.price, performer: concert.performer._id, seatsCount: allSeats.data.length})
-        console.log('czym jest updatedConcerts? powinno byc odpowiedzia serwera na put: ', updatedConcerts);
         dispatch(updateConcerts(updatedConcerts.data));
       });
-      
       dispatch(endRequest());
-      console.log('ok, zobaczmy koncerty po zmianie: ', await axios.get(`${API_URL}/concerts/day/${seat.day}`))
-
     } catch(e) {
       dispatch(errorRequest(e.message));
     }

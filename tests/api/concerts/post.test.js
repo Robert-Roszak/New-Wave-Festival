@@ -9,18 +9,8 @@ chai.use(chaiHttp);
 const expect = chai.expect;
 const request = chai.request;
 
-const NODE_ENV = process.env.NODE_ENV;
-let dbUri = '';
-
-if(NODE_ENV === 'production') dbUri = 'url to remote db';
-else if(NODE_ENV === 'test') dbUri = 'mongodb://localhost:27017/NewWaveDBtest';
-else dbUri = 'mongodb://localhost:27017/NewWaveDB';
-
-mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
-const db = mongoose.connection;
-
 describe('POST /api/concerts', () => {
-    afterEach(async () => {
+    after(async () => {
         await Concert.deleteMany();
     });
 

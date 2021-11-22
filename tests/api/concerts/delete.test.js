@@ -9,23 +9,13 @@ chai.use(chaiHttp);
 const expect = chai.expect;
 const request = chai.request;
 
-const NODE_ENV = process.env.NODE_ENV;
-let dbUri = '';
-
-if(NODE_ENV === 'production') dbUri = 'url to remote db';
-else if(NODE_ENV === 'test') dbUri = 'mongodb://localhost:27017/NewWaveDBtest';
-else dbUri = 'mongodb://localhost:27017/NewWaveDB';
-
-mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
-const db = mongoose.connection;
-
 describe('GET /api/concerts', () => {
-    beforeEach(async () => {
+    before(async () => {
         const testConcertOne = new Concert({ _id: '5d9f1140f10a81216cfd4408', performer: '618fa8174052bf37eaa0caaa', price: 25, day: 3, seatsCount: 30 });
         await testConcertOne.save();
     });
 
-    afterEach(async () => {
+    after(async () => {
         await Concert.deleteMany();
     });
  
