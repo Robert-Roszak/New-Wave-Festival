@@ -3,6 +3,11 @@ import { Row, Col } from 'reactstrap';
 
 import './Concert.scss';
 
+const handleSeats = (seats) => {
+  if (!seats) return '50'
+  else return 50-seats;
+};
+
 const Concert = ({ performer, price, day, seatsCount }) => (
   <article className="concert">
     <Row noGutters>
@@ -16,7 +21,7 @@ const Concert = ({ performer, price, day, seatsCount }) => (
           <img className="concert__info__back" src={performer.image} alt={performer}/>
           <h2 className="concert__info__performer">{ performer.name }</h2>
           <h3 className="concert__info__genre">{ performer.genre }</h3>
-          <p className="concert__info__tickets">Only {50-seatsCount} tickets left!</p>
+          <p className="concert__info__tickets">Only {handleSeats(seatsCount)} tickets left!</p>
           <p className="concert__info__day-n-price">Day: {day}, Price: { price }$</p>
         </div>
       </Col>

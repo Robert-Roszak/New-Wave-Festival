@@ -4,6 +4,7 @@ const SeatController = require('../controllers/seat.controller');
 
 router.get('/seats', SeatController.getAll);
 router.get('/seats/:id', SeatController.getSeatById);
+router.get('/seats/day/:day', SeatController.getSeatsByDay);
 router.post('/seats', SeatController.addSeat)
 router.put('/seats/:id', SeatController.editSeat)
 router.delete('/seats/:id', SeatController.deleteSeat)

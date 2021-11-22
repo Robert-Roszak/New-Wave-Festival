@@ -20,6 +20,17 @@ exports.getSeatById = async (req, res) => {
     }
 };
 
+exports.getSeatsByDay = async (req, res) => {
+    try {
+      const seatsByDay = await Seat.find({ day: req.params.day });
+      if(!seatsByDay) res.status(404).json({ message: 'Not found' });
+      else res.json(seatsByDay);
+    }
+    catch(err) {
+      res.status(500).json({ message: err });
+    }
+};
+
 exports.addSeat = async (req, res) => {
     try {
         const { day, seat, client, email } = req.body;
