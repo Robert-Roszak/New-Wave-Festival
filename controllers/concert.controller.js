@@ -1,5 +1,5 @@
 const Concert = require('../models/concert.model');
-const Seat = require('../models/seat.model');
+const sanitize = require('mongo-sanitize');
 
 exports.getAll = async (req, res) => {
   try {
@@ -86,7 +86,10 @@ exports.addConcert = async (req, res) => {
   try {
       const { performer, price, day } = req.body;
       if (performer && price && day ) {
-        const newConcert = new Concert({ performer: performer, price: price, day: day });
+        const cleanPerformer = sanitize(performer);
+        const cleanPrice = sanitize(price);
+        const cleanDay = sanitize(day);
+        const newConcert = new Concert({ performer: cleanPerformer, price: cleanPrice, day: cleanDay });
         await newConcert.save();
         res.json(await Concert.find().populate('performer'));
       }

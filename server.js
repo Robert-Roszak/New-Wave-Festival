@@ -3,12 +3,14 @@ const cors = require('cors');
 const path = require('path');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 const port = 8000;
 const app = express();
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 app.use(cors());
+app.use(helmet());
 
 const testimonialRoutes = require('./routes/testimonials.routes');
 const concertRoutes = require('./routes/concerts.routes');
