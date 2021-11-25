@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { addSeatRequest, getRequests, getSeats } from '../../../redux/seatsRedux';
-import { updateConcertRequest } from '../../../redux/concertsRedux';
 import OrderTicketForm from './OrderTicketForm';
 
 const mapStateToProps = state => ({
@@ -10,7 +9,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addSeat: (seat) => dispatch(addSeatRequest(seat)),
-  updateConcert: (seat) => dispatch(updateConcertRequest(seat)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderTicketForm);
