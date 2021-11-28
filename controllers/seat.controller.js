@@ -65,11 +65,22 @@ exports.editSeat = async (req, res) => {
   try {
     const foundSeat = await Seat.findById(req.params.id);
     if(foundSeat) {
+      if (parseInt(foundSeat.day) !== parseInt(day)) {
+        const concertsForDay = await Concert.find({ day: foundSeat.day });
+        concertsForDay.forEach(concert => {
+          concert.seatsCount--;
+          concert.save();
+        });
+      };
       foundSeat.day = day;
       foundSeat.seat = seat;
       foundSeat.client = client;
       foundSeat.email = email;
       await foundSeat.save();
+
+      //emit doesn't work properly here, how to send seats for each socket's day view?
+      //const seatsForDay = await Seat.find({ day: foundSeat.day });
+      //req.io.emit('seatsUpdated', seatsForDay);
       res.json(await Seat.find());
     }
     else res.status(404).json({ message: 'Not found...' });
@@ -84,6 +95,14 @@ exports.deleteSeat = async (req, res) => {
     const foundSeat = await Seat.findById(req.params.id);
     if(foundSeat) {
       await foundSeat.remove();
+
+      const concertsForDay = await Concert.find({ day: foundSeat.day });
+      const seatsForDay = await Seat.find({ day: foundSeat.day });
+      concertsForDay.forEach(concert => {
+        concert.seatsCount = seatsForDay.length;
+        concert.save();
+      });
+      req.io.emit('seatsUpdated', seatsForDay);
       res.json(await Seat.find());
     }
     else res.status(404).json({ message: 'Not found...' });

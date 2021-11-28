@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Concert from './../Concert/Concert';
+import Concert from './../Concert/ConcertContainer';
 
 const Concerts = ({ concerts }) => (
   <section>
